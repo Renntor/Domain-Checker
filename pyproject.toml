@@ -17,6 +17,7 @@ pytest-cov = "^4.1.0"
 pydantic = "^2.6.1"
 psycopg2-binary = "^2.9.9"
 ipython = "^8.21.0"
+telebot = "^0.0.5"
 
 
 [build-system]
