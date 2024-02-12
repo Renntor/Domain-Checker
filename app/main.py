@@ -1,10 +1,14 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from models import base
+from models import users
 from config.database import engine, SessionLocal
 from schemas.user import User, UserCreate
 from routers import crud_user
-base.Base.metadata.create_all(bind=engine)
+from passlib.context import CryptContext
+
+
+pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+users.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
@@ -21,7 +25,9 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = crud_user.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail='Email already used')
+    user.password = pwd_context.hash(user.password)
     return crud_user.create_user(db=db, user=user)
+
 
 @app.get('/users/', response_model=list[User])
 def read_users(db: Session = Depends(get_db)):
