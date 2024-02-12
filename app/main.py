@@ -4,11 +4,11 @@ from models import users
 from config.database import engine, SessionLocal
 from schemas.user import User, UserCreate
 from routers import crud_user
+from service.utils import verify_password
 
 
 users.Base.metadata.create_all(bind=engine)
 app = FastAPI()
-
 
 def get_db():
     db = SessionLocal()
@@ -19,7 +19,7 @@ def get_db():
 
 
 @app.post('/users/', response_model=User)
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
+async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = crud_user.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail='Email already used')
@@ -27,14 +27,17 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
 
 @app.get('/users/', response_model=list[User])
-def read_users(db: Session = Depends(get_db)):
+async def read_users(db: Session = Depends(get_db)):
     users = crud_user.get_users(db)
     return users
 
 
-@app.get('/users/{user_id}/items/', response_model=User)
-def read_user(user_id: int, db: Session = Depends(get_db)):
-    db_user = crud_user.get_user(db, user_id=user_id)
+@app.get('/users/{email}/', response_model=User)
+async def read_user(email: str, password: str, db: Session = Depends(get_db)):
+    db_user = crud_user.get_user_by_email(db, email=email)
     if db_user is None:
         raise HTTPException(status_code=400, detail="User not found")
+    hash_password = db_user.password
+    if not verify_password(password, hash_password):
+        raise HTTPException(status_code=400, detail='Email or password is wrong')
     return db_user
