@@ -19,6 +19,8 @@ psycopg2-binary = "^2.9.9"
 ipython = "^8.21.0"
 telebot = "^0.0.5"
 passlib = "^1.7.4"
+bs4 = "^0.0.2"
+lxml = "^5.1.0"
 
 
 [build-system]
