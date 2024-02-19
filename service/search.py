@@ -31,5 +31,3 @@ class DomainRU(Domain):
         created_date = re.findall(r'created:       \d{4}-\d\d-\d\d', soup)[0][15:]
         return created_date, experi_date
 
-
-
