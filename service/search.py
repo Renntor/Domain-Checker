@@ -7,23 +7,20 @@ import httpx
 class Domain(ABC):
 
     url = 'https://who.is/whois/'
+    region: str
 
     @abstractmethod
-    def __init__(self):
+    def search_data(self, name):
         pass
 
-    @abstractmethod
-    def search_data(self):
-        pass
 
 
 class DomainRU(Domain):
 
-    def __init__(self, name):
-        self.name = name
+    region = 'ru'
 
-    def search_data(self):
-        data = httpx.get(self.url + self.name, timeout=200.0).text
+    def search_data(self, name: str):
+        data = httpx.get(self.url + name, timeout=200.0).text
         if '504 Gateway' in data:
             return None
         soup = BeautifulSoup(data, 'lxml').find(style='border:0px;').text
@@ -34,11 +31,10 @@ class DomainRU(Domain):
 
 class DomainCOM(Domain):
 
-    def __init__(self, name):
-        self.name = name
+    region = 'com'
 
-    def search_data(self):
-        data = httpx.get(self.url + self.name, timeout=200.0).text
+    def search_data(self, name: str):
+        data = httpx.get(self.url + name, timeout=200.0).text
         if '504 Gateway' in data:
             return None
         soup = BeautifulSoup(data, 'lxml').find_all(class_='col-md-8 queryResponseBodyValue')[4:6]

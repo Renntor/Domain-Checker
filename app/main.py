@@ -7,9 +7,10 @@ from schemas.domain_schema import DomainCreate, Domain
 from routers import crud_user, crud_domain
 from service.utils import verify_password
 
-
 users.Base.metadata.create_all(bind=engine)
 app = FastAPI()
+
+
 
 def get_db():
     db = SessionLocal()
@@ -49,7 +50,10 @@ async def create_domain(domain: DomainCreate, db: Session = Depends(get_db)):
     db_domain = crud_domain.get_domain(db, domain=domain.name)
     if db_domain:
         return db_domain
-    return crud_domain.create_domain(db=db, domain=domain)
+    if crud_domain.create_domain(db=db, domain=domain) is not None:
+        return crud_domain.create_domain(db=db, domain=domain)
+    else:
+        HTTPException(status_code=400, detail='Domain not found')
 
 
 @app.get('/domain/', response_model=Domain)
