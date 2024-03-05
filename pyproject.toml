@@ -18,10 +18,12 @@ pydantic = "^2.6.1"
 psycopg2-binary = "^2.9.9"
 ipython = "^8.21.0"
 telebot = "^0.0.5"
-passlib = "^1.7.4"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 bs4 = "^0.0.2"
 lxml = "^5.1.0"
 alembic = "^1.13.1"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+python-multipart = "^0.0.9"
 
 
 [build-system]

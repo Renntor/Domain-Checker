@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from schemas.links_schema import Links
 
 
 class UserBase(BaseModel):
@@ -12,6 +13,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     is_active: bool
+    link: Links
 
     class Config:
         orm_mode = True

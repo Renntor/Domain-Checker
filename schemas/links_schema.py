@@ -6,7 +6,6 @@ class Links(BaseModel):
     user: int
     domain_id: int
 
-
     class Config:
         orm_mode = True
 
