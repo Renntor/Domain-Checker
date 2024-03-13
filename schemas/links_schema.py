@@ -1,11 +1,15 @@
 from pydantic import BaseModel
 
 
-class Links(BaseModel):
-    id: int
+class CreateLinks(BaseModel):
     user: int
+
+
+class Links(CreateLinks):
+    id: int
     domain_id: int
 
     class Config:
         orm_mode = True
+
 

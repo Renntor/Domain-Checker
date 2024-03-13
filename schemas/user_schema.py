@@ -1,5 +1,7 @@
 from pydantic import BaseModel
-from schemas.links_schema import Links
+from sqlalchemy.orm import Mapped, relationship
+
+from schemas.links_schema import CreateLinks
 
 
 class UserBase(BaseModel):
@@ -13,7 +15,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     is_active: bool
-    link: Links
+    link: CreateLinks
 
     class Config:
         orm_mode = True
