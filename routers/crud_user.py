@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from models.users import User
+from models.users import User, Link
 from schemas.user_schema import UserCreate
 from schemas.links_schema import CreateLinks
 
@@ -22,8 +22,17 @@ def get_users(db: Session):
 def create_user(db: Session, user: UserCreate):
     password = pwd_context.hash(user.password)
     db_user = User(email=user.email, password=password)
-    print(db_user.id)
     db.add(db_user)
     db.commit()
+    print(123)
+    db_link = Link(user=db_user)
+    print(12345)
+    db.add(db_link)
+    db.commit()
+    db_user.link = db_link
+    db.add(db_user)
+    db.commit()
+    print(db_user.id)
+    db.refresh(db_user)
     db.refresh(db_user)
     return db_user

@@ -18,5 +18,5 @@ class Link(Base):
 
     id = Column(Integer, primary_key=True)
     user: Mapped["User"] = relationship('User', back_populates='link')
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete="CASCADE"))
     domain_id = Column(Integer(), ForeignKey('domains.id'), nullable=True)

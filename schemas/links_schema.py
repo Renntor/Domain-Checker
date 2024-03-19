@@ -7,6 +7,7 @@ class CreateLinks(BaseModel):
 
 class Links(CreateLinks):
     id: int
+    user_id: int
     domain_id: int
 
     class Config:
